@@ -1,0 +1,168 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+package services;
+option go_package = ".;services";
+
+message Error {
+	string error = 1;
+	string message = 2;
+}
+
+message FilterField {
+	string type = 1;
+	string value = 2;
+}
+
+message Filter {
+	FilterField id = 1;
+    FilterField name = 2;
+    FilterField schema = 3;
+    FilterField triggers = 4;
+    FilterField connectors = 5;
+    FilterField user = 6;
+}
+
+message Service {
+	string id = 1;
+    string name = 2;
+    string schema = 3;
+    repeated string triggers = 4;
+    repeated string connectors = 5;
+    string user = 6;
+}
+
+message GetSingleRequest{
+	Filter filter = 1;
+}
+  
+message GetSingleResponse {
+	Service data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetMultipleRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+  
+message GetMultipleResponse {
+	repeated Service data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateSingleRequest {
+	Service data = 1;
+}
+
+message CreateSingleResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateMultipleRequest {
+	repeated Service data = 1;
+}
+
+message CreateMultipleResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateSingleRequest {
+	Filter filter = 1;
+	Service data = 2;
+}
+
+message UpdateSingleResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateMultipleRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+	Service data = 3;
+}
+
+message UpdateMultipleResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteSingleRequest{
+	string id = 1;
+	Filter filter = 2;
+}
+
+message DeleteSingleResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteMultipleRequest{
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+
+message DeleteMultipleResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+
+service serviceService {
+
+	rpc GetSingle(GetSingleRequest) returns (GetSingleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/getSingle"
+			body: "*"
+		};
+	}
+	rpc GetMultiple(GetMultipleRequest) returns (GetMultipleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/getMultiple"
+			body: "*"
+		};
+	}
+	rpc CreateSingle(CreateSingleRequest) returns (CreateSingleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/createSingle"
+			body: "*"
+		};
+	}
+	rpc CreateMultiple(CreateMultipleRequest) returns (CreateMultipleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/createMultiple"
+			body: "*"
+		};
+	}
+	rpc UpdateSingle(UpdateSingleRequest) returns (UpdateSingleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/updateSingle"
+			body: "*"
+		};
+	}
+	rpc UpdateMultiple(UpdateMultipleRequest) returns (UpdateMultipleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/updateMultiple"
+			body: "*"
+		};
+	}
+	rpc DeleteSingle(DeleteSingleRequest) returns (DeleteSingleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/deleteSingle"
+			body: "*"
+		};
+	}
+	rpc DeleteMultiple(DeleteMultipleRequest) returns (DeleteMultipleResponse) {
+		option (google.api.http) = {
+			post: "/v1/services/deleteMultiple"
+			body: "*"
+		};
+	}
+
+}
