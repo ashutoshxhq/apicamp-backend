@@ -8,7 +8,7 @@ message Error {
 	string message = 2;
 }
 
-message Functions {
+message Function {
 	string id = 1;
     string name = 2;
     string request = 3;
@@ -16,12 +16,178 @@ message Functions {
     string user = 5;
 }
 
-message Fields {
+message GetFunctionRequest{
+	Function filter = 1;
+}
+  
+message GetFunctionResponse {
+	Function data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetFunctionsRequest {
+	repeated string ids = 1;
+	Function filter = 2;
+}
+  
+message GetFunctionsResponse {
+	repeated Function data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateFunctionRequest {
+	Function data = 1;
+}
+
+message CreateFunctionResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateFunctionsRequest {
+	repeated Function data = 1;
+}
+
+message CreateFunctionsResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateFunctionRequest {
+	Function filter = 1;
+	Function data = 2;
+}
+
+message UpdateFunctionResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateFunctionsRequest {
+	repeated string ids = 1;
+	Function filter = 2;
+	Function data = 3;
+}
+
+message UpdateFunctionsResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteFunctionRequest{
+	string id = 1;
+	Function filter = 2;
+}
+
+message DeleteFunctionResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteFunctionsRequest{
+	repeated string ids = 1;
+	Function filter = 2;
+}
+
+message DeleteFunctionsResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+
+message Field {
 	string id = 1;
     string name = 2;
     string type = 3;
     string key = 4;
     string user = 5;
+}
+
+
+message GetFieldRequest{
+	Field filter = 1;
+}
+  
+message GetFieldResponse {
+	Field data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetFieldsRequest {
+	repeated string ids = 1;
+	Field filter = 2;
+}
+  
+message GetFieldsResponse {
+	repeated Field data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateFieldRequest {
+	Field data = 1;
+}
+
+message CreateFieldResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateFieldsRequest {
+	repeated Field data = 1;
+}
+
+message CreateFieldsResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateFieldRequest {
+	Field filter = 1;
+	Field data = 2;
+}
+
+message UpdateFieldResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateFieldsRequest {
+	repeated string ids = 1;
+	Field filter = 2;
+	Field data = 3;
+}
+
+message UpdateFieldsResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteFieldRequest{
+	string id = 1;
+	Field filter = 2;
+}
+
+message DeleteFieldResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteFieldsRequest{
+	repeated string ids = 1;
+	Field filter = 2;
+}
+
+message DeleteFieldsResponse{
+	bool success = 1;
+	Error error = 2;
 }
 
 message Model {
@@ -30,6 +196,90 @@ message Model {
     repeated string fields = 3;
     string user = 5;
 }
+
+
+message GetModelRequest{
+	Model filter = 1;
+}
+  
+message GetModelResponse {
+	Model data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetModelsRequest {
+	repeated string ids = 1;
+	Model filter = 2;
+}
+  
+message GetModelsResponse {
+	repeated Model data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateModelRequest {
+	Model data = 1;
+}
+
+message CreateModelResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateModelsRequest {
+	repeated Model data = 1;
+}
+
+message CreateModelsResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateModelRequest {
+	Model filter = 1;
+	Model data = 2;
+}
+
+message UpdateModelResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateModelsRequest {
+	repeated string ids = 1;
+	Model filter = 2;
+	Model data = 3;
+}
+
+message UpdateModelsResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteModelRequest{
+	string id = 1;
+	Model filter = 2;
+}
+
+message DeleteModelResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteModelsRequest{
+	repeated string ids = 1;
+	Model filter = 2;
+}
+
+message DeleteModelsResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
 
 message Service {
 	string id = 1;
@@ -169,6 +419,156 @@ service serviceService {
 	rpc DeleteServices(DeleteServicesRequest) returns (DeleteServicesResponse) {
 		option (google.api.http) = {
 			post: "/services/deleteServices"
+			body: "*"
+		};
+	}
+
+
+	rpc GetModel(GetModelRequest) returns (GetModelResponse) {
+		option (google.api.http) = {
+			post: "/services/models/getModel"
+			body: "*"
+		};
+	}
+	rpc GetModels(GetModelsRequest) returns (GetModelsResponse) {
+		option (google.api.http) = {
+			post: "/services/models/getModels"
+			body: "*"
+		};
+	}
+	rpc CreateModel(CreateModelRequest) returns (CreateModelResponse) {
+		option (google.api.http) = {
+			post: "/services/models/createModel"
+			body: "*"
+		};
+	}
+	rpc CreateModels(CreateModelsRequest) returns (CreateModelsResponse) {
+		option (google.api.http) = {
+			post: "/services/models/createModels"
+			body: "*"
+		};
+	}
+	rpc UpdateModel(UpdateModelRequest) returns (UpdateModelResponse) {
+		option (google.api.http) = {
+			post: "/services/models/updateModels"
+			body: "*"
+		};
+	}
+	rpc UpdateModels(UpdateModelsRequest) returns (UpdateModelsResponse) {
+		option (google.api.http) = {
+			post: "/services/models/updateModels"
+			body: "*"
+		};
+	}
+	rpc DeleteModel(DeleteModelRequest) returns (DeleteModelResponse) {
+		option (google.api.http) = {
+			post: "/services/models/deleteModel"
+			body: "*"
+		};
+	}
+	rpc DeleteModels(DeleteModelsRequest) returns (DeleteModelsResponse) {
+		option (google.api.http) = {
+			post: "/services/models/deleteModels"
+			body: "*"
+		};
+	}
+
+
+	rpc GetField(GetFieldRequest) returns (GetFieldResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/getField"
+			body: "*"
+		};
+	}
+	rpc GetFields(GetFieldsRequest) returns (GetFieldsResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/getFields"
+			body: "*"
+		};
+	}
+	rpc CreateField(CreateFieldRequest) returns (CreateFieldResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/createField"
+			body: "*"
+		};
+	}
+	rpc CreateFields(CreateFieldsRequest) returns (CreateFieldsResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/createFields"
+			body: "*"
+		};
+	}
+	rpc UpdateField(UpdateFieldRequest) returns (UpdateFieldResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/updateField"
+			body: "*"
+		};
+	}
+	rpc UpdateFields(UpdateFieldsRequest) returns (UpdateFieldsResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/updateFields"
+			body: "*"
+		};
+	}
+	rpc DeleteField(DeleteFieldRequest) returns (DeleteFieldResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/deleteField"
+			body: "*"
+		};
+	}
+	rpc DeleteFields(DeleteFieldsRequest) returns (DeleteFieldsResponse) {
+		option (google.api.http) = {
+			post: "/services/fields/deleteFields"
+			body: "*"
+		};
+	}
+
+
+	rpc GetFunction(GetFunctionRequest) returns (GetFunctionResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/getFunction"
+			body: "*"
+		};
+	}
+	rpc GetFunctions(GetFunctionsRequest) returns (GetFunctionsResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/getFunctions"
+			body: "*"
+		};
+	}
+	rpc CreateFunction(CreateFunctionRequest) returns (CreateFunctionResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/createFunction"
+			body: "*"
+		};
+	}
+	rpc CreateFunctions(CreateFunctionsRequest) returns (CreateFunctionsResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/createFunctions"
+			body: "*"
+		};
+	}
+	rpc UpdateFunction(UpdateFunctionRequest) returns (UpdateFunctionResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/updateFunction"
+			body: "*"
+		};
+	}
+	rpc UpdateFunctions(UpdateFunctionsRequest) returns (UpdateFunctionsResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/updateFunctions"
+			body: "*"
+		};
+	}
+	rpc DeleteFunction(DeleteFunctionRequest) returns (DeleteFunctionResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/deleteField"
+			body: "*"
+		};
+	}
+	rpc DeleteFunctions(DeleteFunctionsRequest) returns (DeleteFunctionsResponse) {
+		option (google.api.http) = {
+			post: "/services/functions/deleteFunctions"
 			body: "*"
 		};
 	}
