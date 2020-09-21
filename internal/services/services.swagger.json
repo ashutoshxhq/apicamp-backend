@@ -1,0 +1,519 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "services.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/services/createService": {
+      "post": {
+        "operationId": "serviceService_CreateService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesCreateServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesCreateServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/createServices": {
+      "post": {
+        "operationId": "serviceService_CreateServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesCreateServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesCreateServicesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/deleteService": {
+      "post": {
+        "operationId": "serviceService_DeleteService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/deleteServices": {
+      "post": {
+        "operationId": "serviceService_DeleteServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteServicesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/getService": {
+      "post": {
+        "operationId": "serviceService_GetService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesGetServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesGetServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/getServices": {
+      "post": {
+        "operationId": "serviceService_GetServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesGetServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesGetServicesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/updateServices": {
+      "post": {
+        "operationId": "serviceService_UpdateServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateServicesRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "gatewayruntimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "servicesCreateServiceRequest": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesCreateServiceResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesCreateServicesRequest": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/servicesService"
+          }
+        }
+      }
+    },
+    "servicesCreateServicesResponse": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesDeleteServiceRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesDeleteServiceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesDeleteServicesRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesDeleteServicesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "servicesGetServiceRequest": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesGetServiceResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/servicesService"
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesGetServicesRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesGetServicesResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/servicesService"
+          }
+        },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesService": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "user": {
+          "type": "string"
+        }
+      }
+    },
+    "servicesUpdateServiceRequest": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        },
+        "data": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesUpdateServiceResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    },
+    "servicesUpdateServicesRequest": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filter": {
+          "$ref": "#/definitions/servicesService"
+        },
+        "data": {
+          "$ref": "#/definitions/servicesService"
+        }
+      }
+    },
+    "servicesUpdateServicesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
+        "error": {
+          "$ref": "#/definitions/servicesError"
+        }
+      }
+    }
+  }
+}

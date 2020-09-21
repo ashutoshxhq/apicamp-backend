@@ -1,6 +1,6 @@
 syntax = "proto3";
-import "google/api/annotations.proto";
 package services;
+import "google/api/annotations.proto";
 option go_package = ".;services";
 
 message Error {
@@ -8,107 +8,115 @@ message Error {
 	string message = 2;
 }
 
-message FilterField {
-	string type = 1;
-	string value = 2;
+message Functions {
+	string id = 1;
+    string name = 2;
+    string request = 3;
+    string response = 4;
+    string user = 5;
 }
 
-message Filter {
-	FilterField id = 1;
-    FilterField name = 2;
-    FilterField schema = 3;
-    FilterField triggers = 4;
-    FilterField connectors = 5;
-    FilterField user = 6;
+message Fields {
+	string id = 1;
+    string name = 2;
+    string type = 3;
+    string key = 4;
+    string user = 5;
+}
+
+message Model {
+	string id = 1;
+    string name = 2;
+    repeated string fields = 3;
+    string user = 5;
 }
 
 message Service {
 	string id = 1;
     string name = 2;
-    string schema = 3;
-    repeated string triggers = 4;
-    repeated string connectors = 5;
-    string user = 6;
+    repeated string models = 3;
+    repeated string functions = 4;
+    string user = 5;
 }
 
-message GetSingleRequest{
-	Filter filter = 1;
+message GetServiceRequest{
+	Service filter = 1;
 }
   
-message GetSingleResponse {
+message GetServiceResponse {
 	Service data = 1;
 	bool success = 2;
 	Error error = 3;
 }
 
-message GetMultipleRequest {
+message GetServicesRequest {
 	repeated string ids = 1;
-	Filter filter = 2;
+	Service filter = 2;
 }
   
-message GetMultipleResponse {
+message GetServicesResponse {
 	repeated Service data = 1;
 	bool success = 2;
 	Error error = 3;
 }
 
-message CreateSingleRequest {
+message CreateServiceRequest {
 	Service data = 1;
 }
 
-message CreateSingleResponse {
+message CreateServiceResponse {
 	string id = 1;
 	bool success = 2;
 	Error error = 3;
 }
 
-message CreateMultipleRequest {
+message CreateServicesRequest {
 	repeated Service data = 1;
 }
 
-message CreateMultipleResponse {
+message CreateServicesResponse {
 	repeated string ids = 1;
 	bool success = 2;
 	Error error = 3;
 }
 
-message UpdateSingleRequest {
-	Filter filter = 1;
+message UpdateServiceRequest {
+	Service filter = 1;
 	Service data = 2;
 }
 
-message UpdateSingleResponse {
+message UpdateServiceResponse {
 	bool success = 1;
 	Error error = 2;
 }
 
-message UpdateMultipleRequest {
+message UpdateServicesRequest {
 	repeated string ids = 1;
-	Filter filter = 2;
+	Service filter = 2;
 	Service data = 3;
 }
 
-message UpdateMultipleResponse {
+message UpdateServicesResponse {
 	bool success = 1;
 	Error error = 2;
 }
 
-message DeleteSingleRequest{
+message DeleteServiceRequest{
 	string id = 1;
-	Filter filter = 2;
+	Service filter = 2;
 }
 
-message DeleteSingleResponse{
+message DeleteServiceResponse{
 	bool success = 1;
 	Error error = 2;
 }
 
-message DeleteMultipleRequest{
+message DeleteServicesRequest{
 	repeated string ids = 1;
-	Filter filter = 2;
+	Service filter = 2;
 }
 
-message DeleteMultipleResponse{
+message DeleteServicesResponse{
 	bool success = 1;
 	Error error = 2;
 }
@@ -116,51 +124,51 @@ message DeleteMultipleResponse{
 
 service serviceService {
 
-	rpc GetSingle(GetSingleRequest) returns (GetSingleResponse) {
+	rpc GetService(GetServiceRequest) returns (GetServiceResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/getSingle"
+			post: "/services/getService"
 			body: "*"
 		};
 	}
-	rpc GetMultiple(GetMultipleRequest) returns (GetMultipleResponse) {
+	rpc GetServices(GetServicesRequest) returns (GetServicesResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/getMultiple"
+			post: "/services/getServices"
 			body: "*"
 		};
 	}
-	rpc CreateSingle(CreateSingleRequest) returns (CreateSingleResponse) {
+	rpc CreateService(CreateServiceRequest) returns (CreateServiceResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/createSingle"
+			post: "/services/createService"
 			body: "*"
 		};
 	}
-	rpc CreateMultiple(CreateMultipleRequest) returns (CreateMultipleResponse) {
+	rpc CreateServices(CreateServicesRequest) returns (CreateServicesResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/createMultiple"
+			post: "/services/createServices"
 			body: "*"
 		};
 	}
-	rpc UpdateSingle(UpdateSingleRequest) returns (UpdateSingleResponse) {
+	rpc UpdateService(UpdateServiceRequest) returns (UpdateServiceResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/updateSingle"
+			post: "/services/updateServices"
 			body: "*"
 		};
 	}
-	rpc UpdateMultiple(UpdateMultipleRequest) returns (UpdateMultipleResponse) {
+	rpc UpdateServices(UpdateServicesRequest) returns (UpdateServicesResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/updateMultiple"
+			post: "/services/updateServices"
 			body: "*"
 		};
 	}
-	rpc DeleteSingle(DeleteSingleRequest) returns (DeleteSingleResponse) {
+	rpc DeleteService(DeleteServiceRequest) returns (DeleteServiceResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/deleteSingle"
+			post: "/services/deleteService"
 			body: "*"
 		};
 	}
-	rpc DeleteMultiple(DeleteMultipleRequest) returns (DeleteMultipleResponse) {
+	rpc DeleteServices(DeleteServicesRequest) returns (DeleteServicesResponse) {
 		option (google.api.http) = {
-			post: "/v1/services/deleteMultiple"
+			post: "/services/deleteServices"
 			body: "*"
 		};
 	}
