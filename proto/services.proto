@@ -476,49 +476,49 @@ service serviceService {
 
 	rpc GetField(GetFieldRequest) returns (GetFieldResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/getField"
+			post: "/services/models/fields/getField"
 			body: "*"
 		};
 	}
 	rpc GetFields(GetFieldsRequest) returns (GetFieldsResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/getFields"
+			post: "/services/models/fields/getFields"
 			body: "*"
 		};
 	}
 	rpc CreateField(CreateFieldRequest) returns (CreateFieldResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/createField"
+			post: "/services/models/fields/createField"
 			body: "*"
 		};
 	}
 	rpc CreateFields(CreateFieldsRequest) returns (CreateFieldsResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/createFields"
+			post: "/services/models/fields/createFields"
 			body: "*"
 		};
 	}
 	rpc UpdateField(UpdateFieldRequest) returns (UpdateFieldResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/updateField"
+			post: "/services/models/fields/updateField"
 			body: "*"
 		};
 	}
 	rpc UpdateFields(UpdateFieldsRequest) returns (UpdateFieldsResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/updateFields"
+			post: "/services/models/fields/updateFields"
 			body: "*"
 		};
 	}
 	rpc DeleteField(DeleteFieldRequest) returns (DeleteFieldResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/deleteField"
+			post: "/services/models/fields/deleteField"
 			body: "*"
 		};
 	}
 	rpc DeleteFields(DeleteFieldsRequest) returns (DeleteFieldsResponse) {
 		option (google.api.http) = {
-			post: "/services/fields/deleteFields"
+			post: "/services/models/fields/deleteFields"
 			body: "*"
 		};
 	}

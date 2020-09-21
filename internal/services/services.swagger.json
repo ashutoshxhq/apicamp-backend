@@ -139,262 +139,6 @@
         ]
       }
     },
-    "/services/fields/createField": {
-      "post": {
-        "operationId": "serviceService_CreateField",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesCreateFieldResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesCreateFieldRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/createFields": {
-      "post": {
-        "operationId": "serviceService_CreateFields",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesCreateFieldsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesCreateFieldsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/deleteField": {
-      "post": {
-        "operationId": "serviceService_DeleteField",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesDeleteFieldResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesDeleteFieldRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/deleteFields": {
-      "post": {
-        "operationId": "serviceService_DeleteFields",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesDeleteFieldsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesDeleteFieldsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/getField": {
-      "post": {
-        "operationId": "serviceService_GetField",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesGetFieldResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesGetFieldRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/getFields": {
-      "post": {
-        "operationId": "serviceService_GetFields",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesGetFieldsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesGetFieldsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/updateField": {
-      "post": {
-        "operationId": "serviceService_UpdateField",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesUpdateFieldResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesUpdateFieldRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
-    "/services/fields/updateFields": {
-      "post": {
-        "operationId": "serviceService_UpdateFields",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/servicesUpdateFieldsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/gatewayruntimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/servicesUpdateFieldsRequest"
-            }
-          }
-        ],
-        "tags": [
-          "serviceService"
-        ]
-      }
-    },
     "/services/functions/createFunction": {
       "post": {
         "operationId": "serviceService_CreateFunction",
@@ -835,6 +579,262 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/servicesDeleteModelsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/createField": {
+      "post": {
+        "operationId": "serviceService_CreateField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesCreateFieldResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesCreateFieldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/createFields": {
+      "post": {
+        "operationId": "serviceService_CreateFields",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesCreateFieldsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesCreateFieldsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/deleteField": {
+      "post": {
+        "operationId": "serviceService_DeleteField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteFieldResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteFieldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/deleteFields": {
+      "post": {
+        "operationId": "serviceService_DeleteFields",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteFieldsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesDeleteFieldsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/getField": {
+      "post": {
+        "operationId": "serviceService_GetField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesGetFieldResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesGetFieldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/getFields": {
+      "post": {
+        "operationId": "serviceService_GetFields",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesGetFieldsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesGetFieldsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/updateField": {
+      "post": {
+        "operationId": "serviceService_UpdateField",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateFieldResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateFieldRequest"
+            }
+          }
+        ],
+        "tags": [
+          "serviceService"
+        ]
+      }
+    },
+    "/services/models/fields/updateFields": {
+      "post": {
+        "operationId": "serviceService_UpdateFields",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateFieldsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/gatewayruntimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servicesUpdateFieldsRequest"
             }
           }
         ],
