@@ -401,7 +401,7 @@ func (x *Service) GetModels() []*Model {
 	return nil
 }
 
-type CreateServiceCodeRequest struct {
+type GenerateServiceCodeRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -409,8 +409,8 @@ type CreateServiceCodeRequest struct {
 	ServiceId string `protobuf:"bytes,1,opt,name=serviceId,proto3" json:"serviceId,omitempty"`
 }
 
-func (x *CreateServiceCodeRequest) Reset() {
-	*x = CreateServiceCodeRequest{}
+func (x *GenerateServiceCodeRequest) Reset() {
+	*x = GenerateServiceCodeRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_services_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -418,13 +418,13 @@ func (x *CreateServiceCodeRequest) Reset() {
 	}
 }
 
-func (x *CreateServiceCodeRequest) String() string {
+func (x *GenerateServiceCodeRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateServiceCodeRequest) ProtoMessage() {}
+func (*GenerateServiceCodeRequest) ProtoMessage() {}
 
-func (x *CreateServiceCodeRequest) ProtoReflect() protoreflect.Message {
+func (x *GenerateServiceCodeRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_services_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -436,19 +436,19 @@ func (x *CreateServiceCodeRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateServiceCodeRequest.ProtoReflect.Descriptor instead.
-func (*CreateServiceCodeRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GenerateServiceCodeRequest.ProtoReflect.Descriptor instead.
+func (*GenerateServiceCodeRequest) Descriptor() ([]byte, []int) {
 	return file_services_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *CreateServiceCodeRequest) GetServiceId() string {
+func (x *GenerateServiceCodeRequest) GetServiceId() string {
 	if x != nil {
 		return x.ServiceId
 	}
 	return ""
 }
 
-type CreateServiceCodeResponse struct {
+type GenerateServiceCodeResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -457,8 +457,8 @@ type CreateServiceCodeResponse struct {
 	Error   *Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 }
 
-func (x *CreateServiceCodeResponse) Reset() {
-	*x = CreateServiceCodeResponse{}
+func (x *GenerateServiceCodeResponse) Reset() {
+	*x = GenerateServiceCodeResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_services_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -466,13 +466,13 @@ func (x *CreateServiceCodeResponse) Reset() {
 	}
 }
 
-func (x *CreateServiceCodeResponse) String() string {
+func (x *GenerateServiceCodeResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateServiceCodeResponse) ProtoMessage() {}
+func (*GenerateServiceCodeResponse) ProtoMessage() {}
 
-func (x *CreateServiceCodeResponse) ProtoReflect() protoreflect.Message {
+func (x *GenerateServiceCodeResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_services_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -484,19 +484,19 @@ func (x *CreateServiceCodeResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateServiceCodeResponse.ProtoReflect.Descriptor instead.
-func (*CreateServiceCodeResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GenerateServiceCodeResponse.ProtoReflect.Descriptor instead.
+func (*GenerateServiceCodeResponse) Descriptor() ([]byte, []int) {
 	return file_services_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *CreateServiceCodeResponse) GetSuccess() string {
+func (x *GenerateServiceCodeResponse) GetSuccess() string {
 	if x != nil {
 		return x.Success
 	}
 	return ""
 }
 
-func (x *CreateServiceCodeResponse) GetError() *Error {
+func (x *GenerateServiceCodeResponse) GetError() *Error {
 	if x != nil {
 		return x.Error
 	}
@@ -553,27 +553,28 @@ var file_services_proto_rawDesc = []byte{
 	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x12, 0x27, 0x0a, 0x06, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x18, 0x03, 0x20, 0x03,
 	0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x4d, 0x6f,
-	0x64, 0x65, 0x6c, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x22, 0x38, 0x0a, 0x18, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x49, 0x64, 0x22, 0x5c, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x25, 0x0a, 0x05,
-	0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x52, 0x05, 0x65, 0x72,
-	0x72, 0x6f, 0x72, 0x32, 0x8b, 0x01, 0x0a, 0x0e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x79, 0x0a, 0x11, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x22, 0x2e, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x23, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x15, 0x22, 0x10, 0x2f, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x3a, 0x01,
-	0x2a, 0x42, 0x0c, 0x5a, 0x0a, 0x2e, 0x3b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x64, 0x65, 0x6c, 0x52, 0x06, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x22, 0x3a, 0x0a, 0x1a, 0x47,
+	0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f,
+	0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x22, 0x5e, 0x0a, 0x1b, 0x47, 0x65, 0x6e, 0x65, 0x72,
+	0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73,
+	0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73,
+	0x12, 0x25, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x0f, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x45, 0x72, 0x72, 0x6f, 0x72,
+	0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x32, 0x98, 0x01, 0x0a, 0x0e, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x85, 0x01, 0x0a, 0x13, 0x47,
+	0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f,
+	0x64, 0x65, 0x12, 0x24, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x47, 0x65,
+	0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x6f, 0x64,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x2e, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x21, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1b, 0x22, 0x16, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x73, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x64, 0x65, 0x3a,
+	0x01, 0x2a, 0x42, 0x0c, 0x5a, 0x0a, 0x2e, 0x3b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -590,21 +591,21 @@ func file_services_proto_rawDescGZIP() []byte {
 
 var file_services_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_services_proto_goTypes = []interface{}{
-	(*Error)(nil),                     // 0: services.Error
-	(*Field)(nil),                     // 1: services.Field
-	(*Relationship)(nil),              // 2: services.Relationship
-	(*Model)(nil),                     // 3: services.Model
-	(*Service)(nil),                   // 4: services.Service
-	(*CreateServiceCodeRequest)(nil),  // 5: services.CreateServiceCodeRequest
-	(*CreateServiceCodeResponse)(nil), // 6: services.CreateServiceCodeResponse
+	(*Error)(nil),                       // 0: services.Error
+	(*Field)(nil),                       // 1: services.Field
+	(*Relationship)(nil),                // 2: services.Relationship
+	(*Model)(nil),                       // 3: services.Model
+	(*Service)(nil),                     // 4: services.Service
+	(*GenerateServiceCodeRequest)(nil),  // 5: services.GenerateServiceCodeRequest
+	(*GenerateServiceCodeResponse)(nil), // 6: services.GenerateServiceCodeResponse
 }
 var file_services_proto_depIdxs = []int32{
 	1, // 0: services.Model.fields:type_name -> services.Field
 	2, // 1: services.Model.relationships:type_name -> services.Relationship
 	3, // 2: services.Service.models:type_name -> services.Model
-	0, // 3: services.CreateServiceCodeResponse.error:type_name -> services.Error
-	5, // 4: services.serviceService.CreateServiceCode:input_type -> services.CreateServiceCodeRequest
-	6, // 5: services.serviceService.CreateServiceCode:output_type -> services.CreateServiceCodeResponse
+	0, // 3: services.GenerateServiceCodeResponse.error:type_name -> services.Error
+	5, // 4: services.serviceService.GenerateServiceCode:input_type -> services.GenerateServiceCodeRequest
+	6, // 5: services.serviceService.GenerateServiceCode:output_type -> services.GenerateServiceCodeResponse
 	5, // [5:6] is the sub-list for method output_type
 	4, // [4:5] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
@@ -679,7 +680,7 @@ func file_services_proto_init() {
 			}
 		}
 		file_services_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateServiceCodeRequest); i {
+			switch v := v.(*GenerateServiceCodeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -691,7 +692,7 @@ func file_services_proto_init() {
 			}
 		}
 		file_services_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateServiceCodeResponse); i {
+			switch v := v.(*GenerateServiceCodeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -735,7 +736,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ServiceServiceClient interface {
-	CreateServiceCode(ctx context.Context, in *CreateServiceCodeRequest, opts ...grpc.CallOption) (*CreateServiceCodeResponse, error)
+	GenerateServiceCode(ctx context.Context, in *GenerateServiceCodeRequest, opts ...grpc.CallOption) (*GenerateServiceCodeResponse, error)
 }
 
 type serviceServiceClient struct {
@@ -746,9 +747,9 @@ func NewServiceServiceClient(cc grpc.ClientConnInterface) ServiceServiceClient {
 	return &serviceServiceClient{cc}
 }
 
-func (c *serviceServiceClient) CreateServiceCode(ctx context.Context, in *CreateServiceCodeRequest, opts ...grpc.CallOption) (*CreateServiceCodeResponse, error) {
-	out := new(CreateServiceCodeResponse)
-	err := c.cc.Invoke(ctx, "/services.serviceService/CreateServiceCode", in, out, opts...)
+func (c *serviceServiceClient) GenerateServiceCode(ctx context.Context, in *GenerateServiceCodeRequest, opts ...grpc.CallOption) (*GenerateServiceCodeResponse, error) {
+	out := new(GenerateServiceCodeResponse)
+	err := c.cc.Invoke(ctx, "/services.serviceService/GenerateServiceCode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -757,35 +758,35 @@ func (c *serviceServiceClient) CreateServiceCode(ctx context.Context, in *Create
 
 // ServiceServiceServer is the server API for ServiceService service.
 type ServiceServiceServer interface {
-	CreateServiceCode(context.Context, *CreateServiceCodeRequest) (*CreateServiceCodeResponse, error)
+	GenerateServiceCode(context.Context, *GenerateServiceCodeRequest) (*GenerateServiceCodeResponse, error)
 }
 
 // UnimplementedServiceServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedServiceServiceServer struct {
 }
 
-func (*UnimplementedServiceServiceServer) CreateServiceCode(context.Context, *CreateServiceCodeRequest) (*CreateServiceCodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateServiceCode not implemented")
+func (*UnimplementedServiceServiceServer) GenerateServiceCode(context.Context, *GenerateServiceCodeRequest) (*GenerateServiceCodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateServiceCode not implemented")
 }
 
 func RegisterServiceServiceServer(s *grpc.Server, srv ServiceServiceServer) {
 	s.RegisterService(&_ServiceService_serviceDesc, srv)
 }
 
-func _ServiceService_CreateServiceCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateServiceCodeRequest)
+func _ServiceService_GenerateServiceCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateServiceCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServiceServer).CreateServiceCode(ctx, in)
+		return srv.(ServiceServiceServer).GenerateServiceCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/services.serviceService/CreateServiceCode",
+		FullMethod: "/services.serviceService/GenerateServiceCode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServiceServer).CreateServiceCode(ctx, req.(*CreateServiceCodeRequest))
+		return srv.(ServiceServiceServer).GenerateServiceCode(ctx, req.(*GenerateServiceCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -795,8 +796,8 @@ var _ServiceService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateServiceCode",
-			Handler:    _ServiceService_CreateServiceCode_Handler,
+			MethodName: "GenerateServiceCode",
+			Handler:    _ServiceService_GenerateServiceCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
