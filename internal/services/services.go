@@ -77,6 +77,11 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 	}
 	defer response.Body.Close()
 	data, _ := ioutil.ReadAll(response.Body)
-	fmt.Println(string(data))
+	var models map[string]interface{}
+	err = json.Unmarshal(data, &models)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	fmt.Println(models["data"].(map[string]interface{})["models"])
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
 }
