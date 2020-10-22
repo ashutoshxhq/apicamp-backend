@@ -24,7 +24,7 @@ message Relationship {
 	string relationshipModelId = 4;
 	string relationshipModelFieldId = 5;
 	string currentModelId = 6;
-	string currentModelFIeldId = 7;
+	string currentModelFieldId = 7;
 }
 
 message Model {
