@@ -27,7 +27,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 	query := map[string]string{
 		"query": `
             { 
-				services(where: {id: {_eq: "bebcaf8c-a0d7-4504-ae1c-4398071a0eb1"}}){
+				services(where: {id: {_eq: "` + req.ServiceId + `"}}){
 					id
 					name
 					models {
