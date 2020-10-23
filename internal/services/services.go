@@ -13,6 +13,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/apicamp/backend/helpers"
 	"github.com/apicamp/backend/templates"
 )
 
@@ -104,6 +105,9 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		})
 
 		for _, field := range model.(map[string]interface{})["fields"].([]interface{}) {
+			if field.(map[string]interface{})["type"].(string) == "uuid" || field.(map[string]interface{})["type"].(string) == "hashed_string" {
+				field.(map[string]interface{})["type"] = "string"
+			}
 			service.Models[i].Fields = append(service.Models[i].Fields, &Field{
 				Id:        field.(map[string]interface{})["id"].(string),
 				Name:      field.(map[string]interface{})["name"].(string),
@@ -115,6 +119,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		}
 
 		for _, relationship := range model.(map[string]interface{})["relationships"].([]interface{}) {
+
 			service.Models[i].Relationships = append(service.Models[i].Relationships, &Relationship{
 				Id:                       relationship.(map[string]interface{})["id"].(string),
 				Name:                     relationship.(map[string]interface{})["name"].(string),
@@ -132,12 +137,20 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 			return n + 1
 		},
 	}
+	_, err = os.Stat("./temp/" + service.Id + "/proto")
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll("./temp/"+service.Id+"/proto", 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
+	}
+
+	helpers.CopyDirectory("./google", "./temp/"+service.Id+"/proto/google/")
 
 	for _, model := range service.Models {
-		_, err := os.Stat("./temp/" + service.Id + "/proto")
-
+		_, err = os.Stat("./temp/" + service.Id + "/internal" + model.Name)
 		if os.IsNotExist(err) {
-			errDir := os.MkdirAll("./temp/"+service.Id+"/proto", 0755)
+			errDir := os.MkdirAll("./temp/"+service.Id+"/internal/"+model.Name, 0755)
 			if errDir != nil {
 				log.Fatal(err)
 			}
@@ -154,6 +167,9 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		if err != nil {
 			panic(err)
 		}
+		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --go_out=plugins=grpc:./temp/` + service.Id + `/internal/` + model.Name + ` --go_opt=paths=source_relative ` + model.Name + `.proto`)
+		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --grpc-gateway_out=logtostderr=true,paths=source_relative:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
+		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --swagger_out=logtostderr=true:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
 	}
 
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
