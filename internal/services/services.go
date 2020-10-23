@@ -6,8 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"strings"
+	"text/template"
 	"time"
+
+	"github.com/apicamp/backend/templates"
 )
 
 // Server represents the gRPC server
@@ -88,7 +94,6 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 	}
 	var service Service
 
-	// fmt.Println(len(jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["models"].([]interface{})))
 	service.Id = jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["id"].(string)
 	service.Name = jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["name"].(string)
 
@@ -121,6 +126,35 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 			})
 		}
 	}
-	fmt.Print(len(service.Models[0].Fields))
+	funcMap := template.FuncMap{
+		"Title": strings.Title,
+		"addOne": func(n int) int {
+			return n + 1
+		},
+	}
+
+	for _, model := range service.Models {
+		_, err := os.Stat("./temp/" + service.Id + "/proto")
+
+		if os.IsNotExist(err) {
+			errDir := os.MkdirAll("./temp/"+service.Id+"/proto", 0755)
+			if errDir != nil {
+				log.Fatal(err)
+			}
+		}
+		protoHeaderTemplate, err := template.New("proto").Funcs(funcMap).Parse(templates.Proto)
+		if err != nil {
+			panic(err)
+		}
+		protoFile, err := os.Create("./temp/" + service.Id + "/proto/" + model.Name + ".proto")
+		if err != nil {
+			panic(err)
+		}
+		err = protoHeaderTemplate.Execute(protoFile, model)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
 }

@@ -1,0 +1,161 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+package projects;
+option go_package = ".;projects";
+
+message Error {
+	string error = 1;
+	string message = 2;
+}
+
+message FilterField {
+	string type = 1;
+	string value = 2;
+}
+
+message Filter {
+	
+	FilterField name = 1;
+	FilterField user_id = 2;
+	FilterField id = 3;
+}
+
+message Projects {
+	
+	string name = 1;
+	uuid user_id = 2;
+	uuid id = 3;
+}
+
+message GetSingleProjectsRequest{
+	Filter filter = 1;
+}
+  
+message GetSingleProjectsResponse {
+	Projects data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetMultipleProjectsRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+  
+message GetMultipleProjectsResponse {
+	repeated Projects data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateSingleProjectsRequest {
+	Projects data = 1;
+}
+
+message CreateSingleProjectsResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateMultipleProjectsRequest {
+	repeated Projects data = 1;
+}
+
+message CreateMultipleProjectsResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateSingleProjectsRequest {
+	Filter filter = 1;
+	Projects data = 2;
+}
+
+message UpdateSingleProjectsResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateMultipleProjectsRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+	Projects data = 3;
+}
+
+message UpdateMultipleProjectsResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteSingleProjectsRequest{
+	string id = 1;
+	Filter filter = 2;
+}
+
+message DeleteSingleProjectsResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteMultipleProjectsRequest{
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+
+message DeleteMultipleProjectsResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+service projectsService {
+	rpc GetSingleProjects(GetSingleProjectsRequest) returns (GetSingleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/get"
+			body: "*"
+		};
+	}
+	rpc GetMultipleProjects(GetMultipleProjectsRequest) returns (GetMultipleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/getMultiple"
+			body: "*"
+		};
+	}
+	rpc CreateSingleProjects(CreateSingleProjectsRequest) returns (CreateSingleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/create"
+			body: "*"
+		};
+	}
+	rpc CreateMultipleProjects(CreateMultipleProjectsRequest) returns (CreateMultipleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/createMultiple"
+			body: "*"
+		};
+	}
+	rpc UpdateSingleProjects(UpdateSingleProjectsRequest) returns (UpdateSingleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/update"
+			body: "*"
+		};
+	}
+	rpc UpdateMultipleProjects(UpdateMultipleProjectsRequest) returns (UpdateMultipleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/updateMultiple"
+			body: "*"
+		};
+	}
+	rpc DeleteSingleProjects(DeleteSingleProjectsRequest) returns (DeleteSingleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/delete"
+			body: "*"
+		};
+	}
+	rpc DeleteMultipleProjects(DeleteMultipleProjectsRequest) returns (DeleteMultipleProjectsResponse) {
+		option (google.api.http) = {
+			post: "/v1/projects/deleteMultiple"
+			body: "*"
+		};
+	}
+}
