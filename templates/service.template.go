@@ -6,7 +6,7 @@ var Service string = `package {{.Name}}
 import (
 	"encoding/json"
 	
-	"{{.Package}}/services/{{.Name}}/src/utils"
+	"{{.ServiceName}}/services/{{.Name}}/src/utils"
 	uuid "github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
@@ -15,42 +15,33 @@ import (
 // Server represents the gRPC server
 type Server struct {
 }
-{{range $i,$model := .Models}}
-// Get{{$model.Name | Title}} returns single {{$model.Name}}
-func (s *Server) Get{{$model.Name | Title}}(ctx context.Context, req *Get{{$model.Name | Title}}Request) (*Get{{$model.Name | Title}}Response, error) {
+
+// GetSingle{{.Name | Title}} returns single {{.Name}}
+func (s *Server) GetSingle{{.Name | Title}}(ctx context.Context, req *GetSingle{{.Name | Title}}Request) (*GetSingle{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
-		if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		{{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}} 
 	}
-	data, err := utils.GetRecord("{{$model.Name}}", filter)
+	data, err := utils.GetRecord("{{.Name}}", filter)
 	if err != nil {
-		return &Get{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "record_not_found"}}, nil
+		return &GetSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "record_not_found"}}, nil
 	}
-	var record {{$model.Name | Title}}
-	record.Id = data["id"].(string){{range $index,$field := $model.Fields}}
-	{{ if or (eq $field.Type "bool") (eq $field.Type "int32") (eq $field.Type "int64") (eq $field.Type "uint32") (eq $field.Type "uint64") (eq $field.Type "string") }} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}} if req.IncludePassword {
-		record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}})
-		
-	} {{ else }} record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}}) {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }}  record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}}) {{end}} {{end}} {{end}} {{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{end}}
+	var record {{.Name | Title}}
+	{{range $index,$field := .Fields}}
+	{{ if or (eq $field.Type "bool") (eq $field.Type "int32") (eq $field.Type "int64") (eq $field.Type "uint32") (eq $field.Type "uint64") (eq $field.Type "string") }}
+	record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}}) {{end}} 
+	{{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{end}}
 
-	return &Get{{$model.Name | Title}}Response{Success: true, Data: &record}, nil
+	return &GetSingle{{.Name | Title}}Response{Success: true, Data: &record}, nil
 }
 
-// GetMultiple{{$model.Name | Title}} fuctions returns list of all {{$model.Name}} by a specific filter
-func (s *Server) GetMultiple{{$model.Name | Title}}(ctx context.Context, req *GetMultiple{{$model.Name | Title}}Request) (*GetMultiple{{$model.Name | Title}}Response, error) {
+// GetMultiple{{.Name | Title}} fuctions returns list of all {{.Name}} by a specific filter
+func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMultiple{{.Name | Title}}Request) (*GetMultiple{{.Name | Title}}Response, error) {
 
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
@@ -58,196 +49,150 @@ func (s *Server) GetMultiple{{$model.Name | Title}}(ctx context.Context, req *Ge
 			ids := make(map[string]interface{})
 			ids["$in"] = req.Ids
 			filter["id"] = ids
-		} else if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		}{{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}}
 	}
 
-	var records []*{{$model.Name | Title}}
-	data, err := utils.GetRecords("{{$model.Name}}", filter)
+	var records []*{{.Name | Title}}
+	data, err := utils.GetRecords("{{.Name}}", filter)
 	if err != nil {
-		return &GetMultiple{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "records_not_found"}}, nil
+		return &GetMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "records_not_found"}}, nil
 	}
 	for i := 0; i < len(data); i++ {
-		var record {{$model.Name | Title}}
-		record.Id = data[i]["id"].(string){{range $index,$field := $model.Fields}}
-		{{ if or (eq $field.Type "bool") (eq $field.Type "int32") (eq $field.Type "int64") (eq $field.Type "uint32") (eq $field.Type "uint64") (eq $field.Type "string") }} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}} if req.IncludePassword {
-			record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].({{$field.Type}})
-		} {{ else }} record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].({{$field.Type}}) {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }}  record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].({{$field.Type}}) {{end}} {{end}} {{end}} {{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float32){{end}} {{end}}
+		var record {{.Name | Title}}
+		{{range $index,$field := .Fields}}
+		{{ if or (eq $field.Type "bool") (eq $field.Type "int32") (eq $field.Type "int64") (eq $field.Type "uint32") (eq $field.Type "uint64") (eq $field.Type "string") }}
+		record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}}) {{end}} 
+		{{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{end}}
+
 		records = append(records, &record)
 	}
-	return &GetMultiple{{$model.Name | Title}}Response{Success: true, Data: records}, nil
+	return &GetMultiple{{.Name | Title}}Response{Success: true, Data: records}, nil
 }
 
-// Create{{$model.Name | Title}} stores new {{$model.Name}} in database and returns id
-func (s *Server) Create{{$model.Name | Title}}(ctx context.Context, req *Create{{$model.Name | Title}}Request) (*Create{{$model.Name | Title}}Response, error) {
+// CreateSingle{{.Name | Title}} stores new {{.Name}} in database and returns id
+func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
 	req.Data.Id = uuid.New().String()
-	bytes, err := bcrypt.GenerateFromPassword([]byte(req.Data.{{$model.PasswordField | Title}}), 14)
+	
+	err = utils.InsertRecord("{{.Name}}", req.Data)
 	if err != nil {
-		return &Create{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_parse_password"}}, nil
+		return &CreateSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
 	}
-	req.Data.{{$model.PasswordField | Title}} = string(bytes)
-
-	err = utils.InsertRecord("{{$model.Name}}", req.Data)
-	if err != nil {
-		return &Create{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
-	}
-	return &Create{{$model.Name | Title}}Response{Success: true, Id: req.Data.Id}, nil
+	return &CreateSingle{{.Name | Title}}Response{Success: true, Id: req.Data.Id}, nil
 }
 
-// CreateMultiple{{$model.Name | Title}} stores multiple {{$model.Name}} in database and returns ids
-func (s *Server) CreateMultiple{{$model.Name | Title}}(ctx context.Context, req *CreateMultiple{{$model.Name | Title}}Request) (*CreateMultiple{{$model.Name | Title}}Response, error) {
+// CreateMultiple{{.Name | Title}} stores multiple {{.Name}} in database and returns ids
+func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *CreateMultiple{{.Name | Title}}Request) (*CreateMultiple{{.Name | Title}}Response, error) {
 	var records []interface{}
 	var insertedIDs []string
 	for _, record := range req.Data {
 		record.Id = uuid.New().String()
 		insertedIDs = append(insertedIDs, record.Id)
-		bytes, _ := bcrypt.GenerateFromPassword([]byte(record.{{$model.PasswordField | Title}}), 14)
-		record.{{$model.PasswordField | Title}} = string(bytes)
 		records = append(records, record)
 	}
-	err := utils.InsertRecords("{{$model.Name}}", records)
+	err := utils.InsertRecords("{{.Name}}", records)
 	if err != nil {
-		return &CreateMultiple{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
+		return &CreateMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
 	}
-	return &CreateMultiple{{$model.Name | Title}}Response{Success: true, Ids: insertedIDs}, nil
+	return &CreateMultiple{{.Name | Title}}Response{Success: true, Ids: insertedIDs}, nil
 }
 
-// Update{{$model.Name | Title}} updates a {{$model.Name}} and returns success state
-func (s *Server) Update{{$model.Name | Title}}(ctx context.Context, req *Update{{$model.Name | Title}}Request) (*Update{{$model.Name | Title}}Response, error) {
+// UpdateSingle{{.Name | Title}} updates a {{.Name}} and returns success state
+func (s *Server) UpdateSingle{{.Name | Title}}(ctx context.Context, req *UpdateSingle{{.Name | Title}}Request) (*UpdateSingle{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
-		if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		 {{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}} 
 	}
 
 	update := make(map[string]interface{})
 	jsonData, _ := json.Marshal(req.Data)
 	json.Unmarshal(jsonData, &update)
 	
-	err := utils.UpdateRecord("{{$model.Name}}", filter, update)
+	err := utils.UpdateRecord("{{.Name}}", filter, update)
 	if err != nil {
-		return &Update{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_record"}}, nil
+		return &UpdateSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_record"}}, nil
 	}
-	return &Update{{$model.Name | Title}}Response{Success: true}, nil
+	return &UpdateSingle{{.Name | Title}}Response{Success: true}, nil
 }
 
-// UpdateMultiple{{$model.Name | Title}} updates multiple {{$model.Name}} and returns success state
-func (s *Server) UpdateMultiple{{$model.Name | Title}}(ctx context.Context, req *UpdateMultiple{{$model.Name | Title}}Request) (*UpdateMultiple{{$model.Name | Title}}Response, error) {
+// UpdateMultiple{{.Name | Title}} updates multiple {{.Name}} and returns success state
+func (s *Server) UpdateMultiple{{.Name | Title}}(ctx context.Context, req *UpdateMultiple{{.Name | Title}}Request) (*UpdateMultiple{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
 		if len(req.Ids) > 0 {
 			ids := make(map[string]interface{})
 			ids["$in"] = req.Ids
 			filter["id"] = ids
-		} else if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		}{{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}} 
 	}
 
 	update := make(map[string]interface{})
 	jsonData, _ := json.Marshal(req.Data)
 	json.Unmarshal(jsonData, &update)
 
-	err := utils.UpdateRecords("{{$model.Name}}", filter, update)
+	err := utils.UpdateRecords("{{.Name}}", filter, update)
 	if err != nil {
-		return &UpdateMultiple{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_records"}}, nil
+		return &UpdateMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_records"}}, nil
 	}
-	return &UpdateMultiple{{$model.Name | Title}}Response{Success: true}, nil
+	return &UpdateMultiple{{.Name | Title}}Response{Success: true}, nil
 }
 
-// Delete{{$model.Name | Title}} deletes a {{$model.Name}} by id
-func (s *Server) Delete{{$model.Name | Title}}(ctx context.Context, req *Delete{{$model.Name | Title}}Request) (*Delete{{$model.Name | Title}}Response, error) {
+// Delete{{.Name | Title}} deletes a {{.Name}} by id
+func (s *Server) DeleteSingle{{.Name | Title}}(ctx context.Context, req *DeleteSingle{{.Name | Title}}Request) (*DeleteSingle{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
-		if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		{{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}} 
 	}
 
-	err := utils.DeleteRecord("{{$model.Name}}", filter)
+	err := utils.DeleteRecord("{{.Name}}", filter)
 	if err != nil {
-		return &Delete{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_record"}}, nil
+		return &DeleteSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_record"}}, nil
 	}
-	return &Delete{{$model.Name | Title}}Response{Success: true}, nil
+	return &DeleteSingle{{.Name | Title}}Response{Success: true}, nil
 }
 
-// DeleteMultiple{{$model.Name | Title}} deletes multiple {{$model.Name}} by ids or filter
-func (s *Server) DeleteMultiple{{$model.Name | Title}}(ctx context.Context, req *DeleteMultiple{{$model.Name | Title}}Request) (*DeleteMultiple{{$model.Name | Title}}Response, error) {
+// DeleteMultiple{{.Name | Title}} deletes multiple {{.Name}} by ids or filter
+func (s *Server) DeleteMultiple{{.Name | Title}}(ctx context.Context, req *DeleteMultiple{{.Name | Title}}Request) (*DeleteMultiple{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
 		if len(req.Ids) > 0 {
 			ids := make(map[string]interface{})
 			ids["$in"] = req.Ids
 			filter["id"] = ids
-		} else if req.Filter.Id != nil {
-			if req.Filter.Id.Type != "" {
-				filter["id"] = req.Filter.Id.Value
-			}
-		} {{range $index,$field := $model.Fields}} {{if $model.IncludesPassword }} {{if (eq $model.PasswordField $field.Name)}}  {{ else }} 
+		}  {{range $index,$field := .Fields}}
 		if req.Filter.{{$field.Name | Title}} != nil {
 			if req.Filter.{{$field.Name | Title}}.Type != "" { 
 				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
 			}
-		} {{end}} {{ else }} {{if (eq $model.PasswordField $field.Name)}} {{ else }} if req.Filter.{{$field.Name | Title}} != nil {
-			if req.Filter.{{$field.Name | Title}}.Type != "" { 
-				filter["{{$field.Name}}"] = req.Filter.{{$field.Name | Title}}.Value 
-			}
-		} {{end}} {{end}} {{end}} 
+		} {{end}} 
 	}
 
-	err := utils.DeleteRecords("{{$model.Name}}", filter)
+	err := utils.DeleteRecords("{{.Name}}", filter)
 	if err != nil {
-		return &DeleteMultiple{{$model.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_records"}}, nil
+		return &DeleteMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_records"}}, nil
 	}
-	return &DeleteMultiple{{$model.Name | Title}}Response{Success: true}, nil
+	return &DeleteMultiple{{.Name | Title}}Response{Success: true}, nil
 }
-{{end}}
+
 `
 
 //UserService is template for service file generation

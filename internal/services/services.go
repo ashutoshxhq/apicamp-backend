@@ -100,8 +100,9 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 
 	for i, model := range jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["models"].([]interface{}) {
 		service.Models = append(service.Models, &Model{
-			Id:   model.(map[string]interface{})["id"].(string),
-			Name: model.(map[string]interface{})["name"].(string),
+			Id:          model.(map[string]interface{})["id"].(string),
+			Name:        model.(map[string]interface{})["name"].(string),
+			ServiceName: jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["name"].(string),
 		})
 
 		for _, field := range model.(map[string]interface{})["fields"].([]interface{}) {
@@ -155,7 +156,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 				log.Fatal(err)
 			}
 		}
-		protoHeaderTemplate, err := template.New("proto").Funcs(funcMap).Parse(templates.Proto)
+		protoTemplate, err := template.New("proto").Funcs(funcMap).Parse(templates.Proto)
 		if err != nil {
 			panic(err)
 		}
@@ -163,13 +164,25 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		if err != nil {
 			panic(err)
 		}
-		err = protoHeaderTemplate.Execute(protoFile, model)
+		err = protoTemplate.Execute(protoFile, model)
 		if err != nil {
 			panic(err)
 		}
 		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --go_out=plugins=grpc:./temp/` + service.Id + `/internal/` + model.Name + ` --go_opt=paths=source_relative ` + model.Name + `.proto`)
 		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --grpc-gateway_out=logtostderr=true,paths=source_relative:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
 		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --swagger_out=logtostderr=true:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
+		serviceTemplate, err := template.New("service").Funcs(funcMap).Parse(templates.Service)
+		if err != nil {
+			panic(err)
+		}
+		serviceFile, err := os.Create("./temp/" + service.Id + "/internal/" + model.Name + "/" + model.Name + ".go")
+		if err != nil {
+			panic(err)
+		}
+		err = serviceTemplate.Execute(serviceFile, model)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil

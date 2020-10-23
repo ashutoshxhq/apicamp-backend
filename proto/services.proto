@@ -32,6 +32,7 @@ message Model {
 	string name = 2;
 	repeated Field fields = 3;
 	repeated Relationship relationships = 4;
+	string serviceName = 5;
 }
 
 message Service {
