@@ -6,7 +6,7 @@ var Service string = `package {{.Name}}
 import (
 	"encoding/json"
 	
-	"{{.ServiceName}}/utils"
+	"{{.ServiceName}}/helpers"
 	uuid "github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
@@ -27,7 +27,7 @@ func (s *Server) GetSingle{{.Name | Title}}(ctx context.Context, req *GetSingle{
 			}
 		} {{end}} 
 	}
-	data, err := utils.GetRecord("{{.Name}}", filter)
+	data, err := helpers.GetRecord("{{.Name}}", filter)
 	if err != nil {
 		return &GetSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "record_not_found"}}, nil
 	}
@@ -58,7 +58,7 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 	}
 
 	var records []*{{.Name | Title}}
-	data, err := utils.GetRecords("{{.Name}}", filter)
+	data, err := helpers.GetRecords("{{.Name}}", filter)
 	if err != nil {
 		return &GetMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "records_not_found"}}, nil
 	}
@@ -66,8 +66,8 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 		var record {{.Name | Title}}
 		{{range $index,$field := .Fields}}
 		{{ if or (eq $field.Type "bool") (eq $field.Type "int32") (eq $field.Type "int64") (eq $field.Type "uint32") (eq $field.Type "uint64") (eq $field.Type "string") }}
-		record.{{$field.Name | Title}} = data["{{$field.Name}}"].({{$field.Type}}) {{end}} 
-		{{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data["{{$field.Name}}"].(float32){{end}} {{end}}
+		record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].({{$field.Type}}) {{end}} 
+		{{ if (eq $field.Type "double") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float64){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float32){{end}} {{ if (eq $field.Type "float") }}record.{{$field.Name | Title}} = data[i]["{{$field.Name}}"].(float32){{end}} {{end}}
 
 		records = append(records, &record)
 	}
@@ -78,7 +78,7 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
 	req.Data.Id = uuid.New().String()
 	
-	err := utils.InsertRecord("{{.Name}}", req.Data)
+	err := helpers.InsertRecord("{{.Name}}", req.Data)
 	if err != nil {
 		return &CreateSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
 	}
@@ -94,7 +94,7 @@ func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *Creat
 		insertedIDs = append(insertedIDs, record.Id)
 		records = append(records, record)
 	}
-	err := utils.InsertRecords("{{.Name}}", records)
+	err := helpers.InsertRecords("{{.Name}}", records)
 	if err != nil {
 		return &CreateMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
 	}
@@ -117,7 +117,7 @@ func (s *Server) UpdateSingle{{.Name | Title}}(ctx context.Context, req *UpdateS
 	jsonData, _ := json.Marshal(req.Data)
 	json.Unmarshal(jsonData, &update)
 	
-	err := utils.UpdateRecord("{{.Name}}", filter, update)
+	err := helpers.UpdateRecord("{{.Name}}", filter, update)
 	if err != nil {
 		return &UpdateSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_record"}}, nil
 	}
@@ -144,7 +144,7 @@ func (s *Server) UpdateMultiple{{.Name | Title}}(ctx context.Context, req *Updat
 	jsonData, _ := json.Marshal(req.Data)
 	json.Unmarshal(jsonData, &update)
 
-	err := utils.UpdateRecords("{{.Name}}", filter, update)
+	err := helpers.UpdateRecords("{{.Name}}", filter, update)
 	if err != nil {
 		return &UpdateMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_update_records"}}, nil
 	}
@@ -163,7 +163,7 @@ func (s *Server) DeleteSingle{{.Name | Title}}(ctx context.Context, req *DeleteS
 		} {{end}} 
 	}
 
-	err := utils.DeleteRecord("{{.Name}}", filter)
+	err := helpers.DeleteRecord("{{.Name}}", filter)
 	if err != nil {
 		return &DeleteSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_record"}}, nil
 	}
@@ -186,7 +186,7 @@ func (s *Server) DeleteMultiple{{.Name | Title}}(ctx context.Context, req *Delet
 		} {{end}} 
 	}
 
-	err := utils.DeleteRecords("{{.Name}}", filter)
+	err := helpers.DeleteRecords("{{.Name}}", filter)
 	if err != nil {
 		return &DeleteMultiple{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_delete_records"}}, nil
 	}
@@ -201,8 +201,8 @@ var UserService string = `package {{.Name}}
 // Do your Implementations here...
 `
 
-//Database is template for database helper function generation
-var Database string = `package utils
+//Mongo is template for database helper function generation
+var Mongo string = `package helpers
 
 import (
 	"context"
@@ -352,7 +352,8 @@ import (
 	"net/http"
 	"sync"
 
-	{{.Name}} "{{.Package}}/services/{{.Name}}/src"
+	{{range $index,$model := .Models}}"{{.ServiceName}}/internal/{{$model.Name}}"
+	{{end}} 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/rs/cors"
 	"google.golang.org/grpc"
@@ -365,10 +366,10 @@ func startGRPC(wg *sync.WaitGroup) {
 	}
 	
 	grpcServer := grpc.NewServer()
-
-	{{.Name}}Server := {{.Name}}.Server{}
-
-	{{.Name}}.Register{{.Name | Title}}ServiceServer(grpcServer, &{{.Name}}Server)
+	{{range $index,$model := .Models}}
+	{{$model.Name}}Server := {{$model.Name}}.Server{}
+	{{$model.Name}}.Register{{$model.Name | Title}}ServiceServer(grpcServer, &{{$model.Name}}Server)
+	{{end}} 
 	log.Println("gRPC server ready...")
 	err = grpcServer.Serve(lis)
 	if err != nil {
@@ -391,12 +392,14 @@ func startHTTP(wg *sync.WaitGroup) {
 
 	// Register grpc-gateway
 	rmux := runtime.NewServeMux()
-
-	{{.Name}}Client := {{.Name}}.New{{.Name | Title}}ServiceClient(conn)
-	err = {{.Name}}.Register{{.Name | Title}}ServiceHandlerClient(ctx, rmux, {{.Name}}Client)
+	{{range $index,$model := .Models}}
+	{{$model.Name}}Client := {{$model.Name}}.New{{$model.Name | Title}}ServiceClient(conn)
+	err = {{$model.Name}}.Register{{$model.Name | Title}}ServiceHandlerClient(ctx, rmux, {{$model.Name}}Client)
 	if err != nil {
 		log.Fatal(err)
 	}
+	{{end}}
+	
 	handler := cors.Default().Handler(rmux)
 	log.Println("rest server ready...")
 

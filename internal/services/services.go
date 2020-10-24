@@ -146,6 +146,14 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		}
 	}
 
+	_, err = os.Stat("./temp/" + service.Id + "/helpers")
+	if os.IsNotExist(err) {
+		errDir := os.MkdirAll("./temp/"+service.Id+"/helpers", 0755)
+		if errDir != nil {
+			log.Fatal(err)
+		}
+	}
+
 	helpers.CopyDirectory("./google", "./temp/"+service.Id+"/proto/google/")
 
 	for _, model := range service.Models {
@@ -185,5 +193,26 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		}
 	}
 
+	serverTemplate, err := template.New("service").Funcs(funcMap).Parse(templates.ServerFile)
+	if err != nil {
+		panic(err)
+	}
+	serverFile, err := os.Create("./temp/" + service.Id + "/main.go")
+	if err != nil {
+		panic(err)
+	}
+	err = serverTemplate.Execute(serverFile, &service)
+	if err != nil {
+		panic(err)
+	}
+	err = ioutil.WriteFile("./temp/"+service.Id+"/DockerFile", []byte(templates.DockerFile), 0755)
+	if err != nil {
+		fmt.Printf("Unable to write file: %v", err)
+	}
+	err = ioutil.WriteFile("./temp/"+service.Id+"/helpers/mongo.go", []byte(templates.Mongo), 0755)
+	if err != nil {
+		fmt.Printf("Unable to write file: %v", err)
+	}
+	helpers.ExecuteCommandInDirectory("go mod init "+service.Name, "./temp/"+service.Id)
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
 }

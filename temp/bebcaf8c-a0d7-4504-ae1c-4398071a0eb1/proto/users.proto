@@ -1,0 +1,161 @@
+syntax = "proto3";
+import "google/api/annotations.proto";
+package users;
+option go_package = ".;users";
+
+message Error {
+	string error = 1;
+	string message = 2;
+}
+
+message FilterField {
+	string type = 1;
+	string value = 2;
+}
+
+message Filter {
+	
+	FilterField id = 1;
+	FilterField name = 2;
+	FilterField email = 3;
+}
+
+message Users {
+	
+	string id = 1;
+	string name = 2;
+	string email = 3;
+}
+
+message GetSingleUsersRequest{
+	Filter filter = 1;
+}
+  
+message GetSingleUsersResponse {
+	Users data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message GetMultipleUsersRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+  
+message GetMultipleUsersResponse {
+	repeated Users data = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateSingleUsersRequest {
+	Users data = 1;
+}
+
+message CreateSingleUsersResponse {
+	string id = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message CreateMultipleUsersRequest {
+	repeated Users data = 1;
+}
+
+message CreateMultipleUsersResponse {
+	repeated string ids = 1;
+	bool success = 2;
+	Error error = 3;
+}
+
+message UpdateSingleUsersRequest {
+	Filter filter = 1;
+	Users data = 2;
+}
+
+message UpdateSingleUsersResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message UpdateMultipleUsersRequest {
+	repeated string ids = 1;
+	Filter filter = 2;
+	Users data = 3;
+}
+
+message UpdateMultipleUsersResponse {
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteSingleUsersRequest{
+	string id = 1;
+	Filter filter = 2;
+}
+
+message DeleteSingleUsersResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+message DeleteMultipleUsersRequest{
+	repeated string ids = 1;
+	Filter filter = 2;
+}
+
+message DeleteMultipleUsersResponse{
+	bool success = 1;
+	Error error = 2;
+}
+
+service usersService {
+	rpc GetSingleUsers(GetSingleUsersRequest) returns (GetSingleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/get"
+			body: "*"
+		};
+	}
+	rpc GetMultipleUsers(GetMultipleUsersRequest) returns (GetMultipleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/getMultiple"
+			body: "*"
+		};
+	}
+	rpc CreateSingleUsers(CreateSingleUsersRequest) returns (CreateSingleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/create"
+			body: "*"
+		};
+	}
+	rpc CreateMultipleUsers(CreateMultipleUsersRequest) returns (CreateMultipleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/createMultiple"
+			body: "*"
+		};
+	}
+	rpc UpdateSingleUsers(UpdateSingleUsersRequest) returns (UpdateSingleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/update"
+			body: "*"
+		};
+	}
+	rpc UpdateMultipleUsers(UpdateMultipleUsersRequest) returns (UpdateMultipleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/updateMultiple"
+			body: "*"
+		};
+	}
+	rpc DeleteSingleUsers(DeleteSingleUsersRequest) returns (DeleteSingleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/delete"
+			body: "*"
+		};
+	}
+	rpc DeleteMultipleUsers(DeleteMultipleUsersRequest) returns (DeleteMultipleUsersResponse) {
+		option (google.api.http) = {
+			post: "/v1/users/deleteMultiple"
+			body: "*"
+		};
+	}
+}
