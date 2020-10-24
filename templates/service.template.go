@@ -6,7 +6,7 @@ var Service string = `package {{.Name}}
 import (
 	"encoding/json"
 	
-	"{{.ServiceName}}/services/{{.Name}}/src/utils"
+	"{{.ServiceName}}/utils"
 	uuid "github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
@@ -78,7 +78,7 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
 	req.Data.Id = uuid.New().String()
 	
-	err = utils.InsertRecord("{{.Name}}", req.Data)
+	err := utils.InsertRecord("{{.Name}}", req.Data)
 	if err != nil {
 		return &CreateSingle{{.Name | Title}}Response{Success: false, Error: &Error{Error: "unable_to_insert_record"}}, nil
 	}
@@ -151,7 +151,7 @@ func (s *Server) UpdateMultiple{{.Name | Title}}(ctx context.Context, req *Updat
 	return &UpdateMultiple{{.Name | Title}}Response{Success: true}, nil
 }
 
-// Delete{{.Name | Title}} deletes a {{.Name}} by id
+// DeleteSingle{{.Name | Title}} deletes a {{.Name}} by id
 func (s *Server) DeleteSingle{{.Name | Title}}(ctx context.Context, req *DeleteSingle{{.Name | Title}}Request) (*DeleteSingle{{.Name | Title}}Response, error) {
 	filter := make(map[string]interface{})
 	if req.Filter != nil {
