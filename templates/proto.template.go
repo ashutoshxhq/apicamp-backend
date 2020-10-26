@@ -11,14 +11,10 @@ message Error {
 	string message = 2;
 }
 
-message FilterField {
-	string type = 1;
-	string value = 2;
-}
-
 message Filter {
-	{{range $index,$field := .Fields}}
-	FilterField {{$field.Name}} = {{$index | addOne }};{{end}}
+	string type = 1;
+	string field = 2;
+	string value = 3;
 }
 
 message {{.Name | Title}} {
@@ -27,7 +23,7 @@ message {{.Name | Title}} {
 }
 
 message GetSingle{{.Name | Title}}Request{
-	Filter filter = 1;
+	repeated Filter filters = 1;
 }
   
 message GetSingle{{.Name | Title}}Response {
@@ -38,7 +34,7 @@ message GetSingle{{.Name | Title}}Response {
 
 message GetMultiple{{.Name | Title}}Request {
 	repeated string ids = 1;
-	Filter filter = 2;
+	repeated Filter filters = 2;
 }
   
 message GetMultiple{{.Name | Title}}Response {
@@ -68,7 +64,7 @@ message CreateMultiple{{.Name | Title}}Response {
 }
 
 message UpdateSingle{{.Name | Title}}Request {
-	Filter filter = 1;
+	repeated Filter filters = 1;
 	{{.Name | Title}} data = 2;
 }
 
@@ -79,7 +75,7 @@ message UpdateSingle{{.Name | Title}}Response {
 
 message UpdateMultiple{{.Name | Title}}Request {
 	repeated string ids = 1;
-	Filter filter = 2;
+	repeated Filter filters = 2;
 	{{.Name | Title}} data = 3;
 }
 
@@ -90,7 +86,7 @@ message UpdateMultiple{{.Name | Title}}Response {
 
 message DeleteSingle{{.Name | Title}}Request{
 	string id = 1;
-	Filter filter = 2;
+	repeated Filter filters = 2;
 }
 
 message DeleteSingle{{.Name | Title}}Response{
@@ -100,7 +96,7 @@ message DeleteSingle{{.Name | Title}}Response{
 
 message DeleteMultiple{{.Name | Title}}Request{
 	repeated string ids = 1;
-	Filter filter = 2;
+	repeated Filter filters = 2;
 }
 
 message DeleteMultiple{{.Name | Title}}Response{

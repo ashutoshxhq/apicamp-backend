@@ -1,10 +1,7 @@
-package templates
-
-//Service is template for service file generation
-var Service string = `package {{.Name}}
+package prospects
 
 import (
-	"{{.ServiceName}}/helpers"
+	"demoService/helpers"
 	uuid "github.com/google/uuid"
 	"golang.org/x/net/context"
 )
@@ -13,8 +10,8 @@ import (
 type Server struct {
 }
 
-// GetSingle{{.Name | Title}} returns single {{.Name}}
-func (s *Server) GetSingle{{.Name | Title}}(ctx context.Context, req *GetSingle{{.Name | Title}}Request) (*GetSingle{{.Name | Title}}Response, error) {
+// GetSingleProspects returns single prospects
+func (s *Server) GetSingleProspects(ctx context.Context, req *GetSingleProspectsRequest) (*GetSingleProspectsResponse, error) {
 	var where string
 	for i, filter := range req.Filters {
 		if i != 0 {
@@ -45,13 +42,13 @@ func (s *Server) GetSingle{{.Name | Title}}(ctx context.Context, req *GetSingle{
 		return nil, err
 	}
 	defer conn.Release()
-	rows, err := conn.Query(context.Background(), "SELECT * FROM {{.Name}}"+where+" LIMIT 1")
+	rows, err := conn.Query(context.Background(), "SELECT * FROM prospects"+where+" LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
-	var record {{.Name | Title}}
+	var record Prospects
 	for rows.Next() {
-		err := rows.Scan({{range $index,$field := .Fields}} &record.{{$field.Name  | Title}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }}, {{end}} {{end}})
+		err := rows.Scan( &record.Id,   &record.Name,   &record.Email,   &record.Status,   &record.UserId,   &record.Phone )
 		if err != nil {
 			return nil, err
 		}
@@ -59,11 +56,11 @@ func (s *Server) GetSingle{{.Name | Title}}(ctx context.Context, req *GetSingle{
 	if rows.Err() != nil {
 		return nil, rows.Err()
 	}
-	return &GetSingle{{.Name | Title}}Response{Success: true, Data: &record}, nil
+	return &GetSingleProspectsResponse{Success: true, Data: &record}, nil
 }
 
-// GetMultiple{{.Name | Title}} fuctions returns list of all {{.Name}} by a specific filter
-func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMultiple{{.Name | Title}}Request) (*GetMultiple{{.Name | Title}}Response, error) {
+// GetMultipleProspects fuctions returns list of all prospects by a specific filter
+func (s *Server) GetMultipleProspects(ctx context.Context, req *GetMultipleProspectsRequest) (*GetMultipleProspectsResponse, error) {
 
 	var where string
 	for i, filter := range req.Filters {
@@ -90,19 +87,19 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 	}
 
 	
-	return &GetMultiple{{.Name | Title}}Response{Success: true}, nil
+	return &GetMultipleProspectsResponse{Success: true}, nil
 }
 
-// CreateSingle{{.Name | Title}} stores new {{.Name}} in database and returns id
-func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
+// CreateSingleProspects stores new prospects in database and returns id
+func (s *Server) CreateSingleProspects(ctx context.Context, req *CreateSingleProspectsRequest) (*CreateSingleProspectsResponse, error) {
 	// req.Data.Id = uuid.New().String()
 	
 	
-	return &CreateSingle{{.Name | Title}}Response{Success: true}, nil
+	return &CreateSingleProspectsResponse{Success: true}, nil
 }
 
-// CreateMultiple{{.Name | Title}} stores multiple {{.Name}} in database and returns ids
-func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *CreateMultiple{{.Name | Title}}Request) (*CreateMultiple{{.Name | Title}}Response, error) {
+// CreateMultipleProspects stores multiple prospects in database and returns ids
+func (s *Server) CreateMultipleProspects(ctx context.Context, req *CreateMultipleProspectsRequest) (*CreateMultipleProspectsResponse, error) {
 	var records []interface{}
 	var insertedIDs []string
 	for _, record := range req.Data {
@@ -111,11 +108,11 @@ func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *Creat
 		records = append(records, record)
 	}
 	
-	return &CreateMultiple{{.Name | Title}}Response{Success: true}, nil
+	return &CreateMultipleProspectsResponse{Success: true}, nil
 }
 
-// UpdateSingle{{.Name | Title}} updates a {{.Name}} and returns success state
-func (s *Server) UpdateSingle{{.Name | Title}}(ctx context.Context, req *UpdateSingle{{.Name | Title}}Request) (*UpdateSingle{{.Name | Title}}Response, error) {
+// UpdateSingleProspects updates a prospects and returns success state
+func (s *Server) UpdateSingleProspects(ctx context.Context, req *UpdateSingleProspectsRequest) (*UpdateSingleProspectsResponse, error) {
 	var where string
 	for i, filter := range req.Filters {
 		if i != 0 {
@@ -141,11 +138,11 @@ func (s *Server) UpdateSingle{{.Name | Title}}(ctx context.Context, req *UpdateS
 	}
 
 	
-	return &UpdateSingle{{.Name | Title}}Response{Success: true}, nil
+	return &UpdateSingleProspectsResponse{Success: true}, nil
 }
 
-// UpdateMultiple{{.Name | Title}} updates multiple {{.Name}} and returns success state
-func (s *Server) UpdateMultiple{{.Name | Title}}(ctx context.Context, req *UpdateMultiple{{.Name | Title}}Request) (*UpdateMultiple{{.Name | Title}}Response, error) {
+// UpdateMultipleProspects updates multiple prospects and returns success state
+func (s *Server) UpdateMultipleProspects(ctx context.Context, req *UpdateMultipleProspectsRequest) (*UpdateMultipleProspectsResponse, error) {
 	var where string
 	for i, filter := range req.Filters {
 		if i != 0 {
@@ -171,11 +168,11 @@ func (s *Server) UpdateMultiple{{.Name | Title}}(ctx context.Context, req *Updat
 	}
 
 	
-	return &UpdateMultiple{{.Name | Title}}Response{Success: true}, nil
+	return &UpdateMultipleProspectsResponse{Success: true}, nil
 }
 
-// DeleteSingle{{.Name | Title}} deletes a {{.Name}} by id
-func (s *Server) DeleteSingle{{.Name | Title}}(ctx context.Context, req *DeleteSingle{{.Name | Title}}Request) (*DeleteSingle{{.Name | Title}}Response, error) {
+// DeleteSingleProspects deletes a prospects by id
+func (s *Server) DeleteSingleProspects(ctx context.Context, req *DeleteSingleProspectsRequest) (*DeleteSingleProspectsResponse, error) {
 	var where string
 	for i, filter := range req.Filters {
 		if i != 0 {
@@ -200,11 +197,11 @@ func (s *Server) DeleteSingle{{.Name | Title}}(ctx context.Context, req *DeleteS
 		}
 	}
 	
-	return &DeleteSingle{{.Name | Title}}Response{Success: true}, nil
+	return &DeleteSingleProspectsResponse{Success: true}, nil
 }
 
-// DeleteMultiple{{.Name | Title}} deletes multiple {{.Name}} by ids or filter
-func (s *Server) DeleteMultiple{{.Name | Title}}(ctx context.Context, req *DeleteMultiple{{.Name | Title}}Request) (*DeleteMultiple{{.Name | Title}}Response, error) {
+// DeleteMultipleProspects deletes multiple prospects by ids or filter
+func (s *Server) DeleteMultipleProspects(ctx context.Context, req *DeleteMultipleProspectsRequest) (*DeleteMultipleProspectsResponse, error) {
 	var where string
 	for i, filter := range req.Filters {
 		if i != 0 {
@@ -229,141 +226,6 @@ func (s *Server) DeleteMultiple{{.Name | Title}}(ctx context.Context, req *Delet
 		}
 	}
 	
-	return &DeleteMultiple{{.Name | Title}}Response{Success: true}, nil
+	return &DeleteMultipleProspectsResponse{Success: true}, nil
 }
 
-`
-
-//UserService is template for service file generation
-var UserService string = `package {{.Name}}
-
-// Do your Implementations here...
-`
-
-//Postgres ...
-var Postgres string = `package helpers
-
-import (
-	"context"
-	"fmt"
-	"os"
-
-	"github.com/jackc/pgx/v4/pgxpool"
-)
-
-var (
-	// DatabasePool is global database pool
-	DatabasePool *pgxpool.Pool
-)
-
-//InitializeDatabase ...
-func InitializeDatabase() {
-	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv("DATABASE_URL"))
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	DatabasePool = dbpool
-}
-`
-
-//DockerFile is template for DockerFile generation
-var DockerFile string = `
-FROM golang:alpine as builder
-RUN mkdir /build 
-WORKDIR /build
-COPY go.mod ./
-COPY . .
-RUN go mod tidy
-RUN go build -o main .
-FROM alpine
-RUN adduser -S -D -H -h /app appuser
-USER appuser
-COPY --from=builder /build/main /app/
-WORKDIR /app
-EXPOSE 8000
-EXPOSE 9000
-CMD ["./main"]
-`
-
-//ServerFile ...
-var ServerFile string = `package main
-
-import (
-	"context"
-	"log"
-	"net"
-	"net/http"
-	"sync"
-	"{{.Name}}/helpers"
-	{{range $index,$model := .Models}}"{{.ServiceName}}/internal/{{$model.Name}}"
-	{{end}} 
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/rs/cors"
-	"google.golang.org/grpc"
-)
-
-func startGRPC(wg *sync.WaitGroup) {
-	lis, err := net.Listen("tcp", ":9000")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	
-	grpcServer := grpc.NewServer()
-	{{range $index,$model := .Models}}
-	{{$model.Name}}Server := {{$model.Name}}.Server{}
-	{{$model.Name}}.Register{{$model.Name | Title}}ServiceServer(grpcServer, &{{$model.Name}}Server)
-	{{end}} 
-	log.Println("gRPC server ready...")
-	err = grpcServer.Serve(lis)
-	if err != nil {
-		log.Fatalf("failed to serve: %s", err)
-	}
-	wg.Done()
-}
-
-func startHTTP(wg *sync.WaitGroup) {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	// Connect to the GRPC server
-	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
-	}
-	defer conn.Close()
-
-	// Register grpc-gateway
-	rmux := runtime.NewServeMux()
-	{{range $index,$model := .Models}}
-	{{$model.Name}}Client := {{$model.Name}}.New{{$model.Name | Title}}ServiceClient(conn)
-	err = {{$model.Name}}.Register{{$model.Name | Title}}ServiceHandlerClient(ctx, rmux, {{$model.Name}}Client)
-	if err != nil {
-		log.Fatal(err)
-	}
-	{{end}}
-	
-	handler := cors.Default().Handler(rmux)
-	log.Println("rest server ready...")
-
-	err = http.ListenAndServe(":8000", handler)
-	if err != nil {
-		log.Fatal(err)
-	}
-	wg.Done()
-
-}
-
-func main() {
-	var wg sync.WaitGroup
-	helpers.InitializeDatabase()
-	wg.Add(1)
-	go startGRPC(&wg)
-
-	wg.Add(1)
-	go startHTTP(&wg)
-
-	wg.Wait()
-}
-`

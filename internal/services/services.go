@@ -102,6 +102,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		service.Models = append(service.Models, &Model{
 			Id:          model.(map[string]interface{})["id"].(string),
 			Name:        model.(map[string]interface{})["name"].(string),
+			NoOfFields:  int32(len(model.(map[string]interface{})["fields"].([]interface{}))),
 			ServiceName: jsonData["data"].(map[string]interface{})["services"].([]interface{})[0].(map[string]interface{})["name"].(string),
 		})
 
@@ -136,6 +137,9 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		"Title": strings.Title,
 		"addOne": func(n int) int {
 			return n + 1
+		},
+		"subOne": func(n int32) int32 {
+			return n - 1
 		},
 	}
 	_, err = os.Stat("./temp/" + service.Id + "/proto")
@@ -209,7 +213,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 	if err != nil {
 		fmt.Printf("Unable to write file: %v", err)
 	}
-	err = ioutil.WriteFile("./temp/"+service.Id+"/helpers/mongo.go", []byte(templates.Mongo), 0755)
+	err = ioutil.WriteFile("./temp/"+service.Id+"/helpers/postgres.go", []byte(templates.Postgres), 0755)
 	if err != nil {
 		fmt.Printf("Unable to write file: %v", err)
 	}
