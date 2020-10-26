@@ -89,8 +89,29 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 		}
 	}
 
-	
-	return &GetMultiple{{.Name | Title}}Response{Success: true}, nil
+	conn, err := helpers.DatabasePool.Acquire(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Release()
+	rows, err := conn.Query(context.Background(), "SELECT * FROM {{.Name}}"+where+" LIMIT 100")
+	if err != nil {
+		return nil, err
+	}
+	var records []*{{.Name | Title}}
+	for rows.Next() {
+		var record {{.Name | Title}}
+
+		err := rows.Scan({{range $index,$field := .Fields}} &record.{{$field.Name  | Title}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }}, {{end}} {{end}})
+		if err != nil {
+			return nil, err
+		}
+		records = append(records, &record)
+	}
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+	return &GetMultiple{{.Name | Title}}Response{Success: true, Data: records}, nil
 }
 
 // CreateSingle{{.Name | Title}} stores new {{.Name}} in database and returns id
