@@ -116,20 +116,44 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 
 // CreateSingle{{.Name | Title}} stores new {{.Name}} in database and returns id
 func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
-	// req.Data.Id = uuid.New().String()
+	{{range $index,$field := .Fields}}{{if (eq $field.Default "generateRandomUUID()")}}req.Data.{{$field.Name | Title}} = uuid.New().String(){{end}}{{end}}
 	
+	conn, err := helpers.DatabasePool.Acquire(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Release()
+	_, err = conn.Exec(context.Background(), "INSERT INTO {{.Name}} ({{range $index,$field := .Fields}}{{$field.Name}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }},{{end}} {{end}}) VALUES({{range $index,$field := .Fields}}${{$index | addOne}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }},{{end}} {{end}})", {{range $index,$field := .Fields}}req.Data.{{$field.Name | Title}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }},{{end}} {{end}} )
+	if err != nil {
+		return nil, err
+	}
 	
 	return &CreateSingle{{.Name | Title}}Response{Success: true}, nil
 }
 
 // CreateMultiple{{.Name | Title}} stores multiple {{.Name}} in database and returns ids
 func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *CreateMultiple{{.Name | Title}}Request) (*CreateMultiple{{.Name | Title}}Response, error) {
-	var records []interface{}
-	var insertedIDs []string
-	for _, record := range req.Data {
-		record.Id = uuid.New().String()
-		insertedIDs = append(insertedIDs, record.Id)
-		records = append(records, record)
+	var values string
+	for i, record := range req.Data {
+		if i == 0{
+		values = values +"("
+		} else{
+			values = values +", ("
+		}
+		{{range $index,$field := .Fields}}{{if (eq $field.Default "generateRandomUUID()")}}
+		req.Data[i].{{$field.Name | Title}} = uuid.New().String(){{end}}
+		values = values+ record.{{$field.Name | Title}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }}+","{{end}}{{end}}
+	
+		values = values +")"
+	}	
+	conn, err := helpers.DatabasePool.Acquire(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Release()
+	_, err = conn.Exec(context.Background(), "INSERT INTO {{.Name}} ({{range $index,$field := .Fields}}{{$field.Name}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }},{{end}} {{end}}) VALUES "+values)
+	if err != nil {
+		return nil, err
 	}
 	
 	return &CreateMultiple{{.Name | Title}}Response{Success: true}, nil
