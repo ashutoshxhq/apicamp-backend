@@ -158,7 +158,7 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		}
 	}
 
-	helpers.CopyDirectory("./google", "./temp/"+service.Id+"/proto/google/")
+	helpers.CopyDirectory("./google", "./temp/"+service.Id+"/google/")
 
 	for _, model := range service.Models {
 		_, err = os.Stat("./temp/" + service.Id + "/internal" + model.Name)
@@ -180,9 +180,9 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		if err != nil {
 			panic(err)
 		}
-		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --go_out=plugins=grpc:./temp/` + service.Id + `/internal/` + model.Name + ` --go_opt=paths=source_relative ` + model.Name + `.proto`)
-		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --grpc-gateway_out=logtostderr=true,paths=source_relative:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
-		helpers.ExecuteCommand(`protoc -I=./temp/` + service.Id + `/proto --swagger_out=logtostderr=true:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
+		helpers.ExecuteCommand(`protoc -I=. -I=./temp/` + service.Id + `/proto --go_out=plugins=grpc:./temp/` + service.Id + `/internal/` + model.Name + ` --go_opt=paths=source_relative ` + model.Name + `.proto`)
+		helpers.ExecuteCommand(`protoc -I=. -I=./temp/` + service.Id + `/proto --grpc-gateway_out=logtostderr=true,paths=source_relative:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
+		helpers.ExecuteCommand(`protoc -I=. -I=./temp/` + service.Id + `/proto --swagger_out=logtostderr=true:./temp/` + service.Id + `/internal/` + model.Name + ` ` + model.Name + `.proto`)
 		serviceTemplate, err := template.New("service").Funcs(funcMap).Parse(templates.Service)
 		if err != nil {
 			panic(err)

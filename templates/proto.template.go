@@ -3,19 +3,10 @@ package templates
 //Proto ...
 var Proto string = `syntax = "proto3";
 import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
 package {{.Name}};
 option go_package = ".;{{.Name}}";
-
-message Error {
-	string error = 1;
-	string message = 2;
-}
-
-message Filter {
-	string type = 1;
-	string field = 2;
-	string value = 3;
-}
 
 message {{.Name | Title}} {
 	{{range $index,$field := .Fields}}
@@ -23,24 +14,19 @@ message {{.Name | Title}} {
 }
 
 message GetSingle{{.Name | Title}}Request{
-	repeated Filter filters = 1;
+	map<string, google.protobuf.Value> filters = 1;
 }
   
 message GetSingle{{.Name | Title}}Response {
 	{{.Name | Title}} data = 1;
-	bool success = 2;
-	Error error = 3;
 }
 
 message GetMultiple{{.Name | Title}}Request {
-	repeated string ids = 1;
-	repeated Filter filters = 2;
+	map<string, google.protobuf.Value> filters = 1;
 }
   
 message GetMultiple{{.Name | Title}}Response {
 	repeated {{.Name | Title}} data = 1;
-	bool success = 2;
-	Error error = 3;
 }
 
 message CreateSingle{{.Name | Title}}Request {
@@ -48,9 +34,7 @@ message CreateSingle{{.Name | Title}}Request {
 }
 
 message CreateSingle{{.Name | Title}}Response {
-	string id = 1;
-	bool success = 2;
-	Error error = 3;
+	string message = 2;
 }
 
 message CreateMultiple{{.Name | Title}}Request {
@@ -58,62 +42,36 @@ message CreateMultiple{{.Name | Title}}Request {
 }
 
 message CreateMultiple{{.Name | Title}}Response {
-	repeated string ids = 1;
-	bool success = 2;
-	Error error = 3;
+	string message = 2;
 }
 
-message UpdateSingle{{.Name | Title}}Request {
-	repeated Filter filters = 1;
-	{{.Name | Title}} data = 2;
+message Update{{.Name | Title}}Request {
+	map<string, google.protobuf.Value> filters = 1;
+	map<string, google.protobuf.Value> data = 2;
 }
 
-message UpdateSingle{{.Name | Title}}Response {
-	bool success = 1;
-	Error error = 2;
+message Update{{.Name | Title}}Response {
+	string message = 2;
 }
 
-message UpdateMultiple{{.Name | Title}}Request {
-	repeated string ids = 1;
-	repeated Filter filters = 2;
-	{{.Name | Title}} data = 3;
+message Delete{{.Name | Title}}Request{
+	map<string, google.protobuf.Value> filters = 1;
 }
 
-message UpdateMultiple{{.Name | Title}}Response {
-	bool success = 1;
-	Error error = 2;
-}
-
-message DeleteSingle{{.Name | Title}}Request{
-	string id = 1;
-	repeated Filter filters = 2;
-}
-
-message DeleteSingle{{.Name | Title}}Response{
-	bool success = 1;
-	Error error = 2;
-}
-
-message DeleteMultiple{{.Name | Title}}Request{
-	repeated string ids = 1;
-	repeated Filter filters = 2;
-}
-
-message DeleteMultiple{{.Name | Title}}Response{
-	bool success = 1;
-	Error error = 2;
+message Delete{{.Name | Title}}Response{
+	string message = 2;
 }
 
 service {{.Name}}Service {
 	rpc GetSingle{{.Name | Title}}(GetSingle{{.Name | Title}}Request) returns (GetSingle{{.Name | Title}}Response) {
 		option (google.api.http) = {
-			post: "/v1/{{.Name}}/get"
+			post: "/v1/{{.Name}}/getSingle"
 			body: "*"
 		};
 	}
 	rpc GetMultiple{{.Name | Title}}(GetMultiple{{.Name | Title}}Request) returns (GetMultiple{{.Name | Title}}Response) {
 		option (google.api.http) = {
-			post: "/v1/{{.Name}}/getMultiple"
+			post: "/v1/{{.Name}}"
 			body: "*"
 		};
 	}
@@ -129,29 +87,18 @@ service {{.Name}}Service {
 			body: "*"
 		};
 	}
-	rpc UpdateSingle{{.Name | Title}}(UpdateSingle{{.Name | Title}}Request) returns (UpdateSingle{{.Name | Title}}Response) {
+	rpc Update{{.Name | Title}}(Update{{.Name | Title}}Request) returns (Update{{.Name | Title}}Response) {
 		option (google.api.http) = {
 			post: "/v1/{{.Name}}/update"
 			body: "*"
 		};
 	}
-	rpc UpdateMultiple{{.Name | Title}}(UpdateMultiple{{.Name | Title}}Request) returns (UpdateMultiple{{.Name | Title}}Response) {
-		option (google.api.http) = {
-			post: "/v1/{{.Name}}/updateMultiple"
-			body: "*"
-		};
-	}
-	rpc DeleteSingle{{.Name | Title}}(DeleteSingle{{.Name | Title}}Request) returns (DeleteSingle{{.Name | Title}}Response) {
+	rpc Delete{{.Name | Title}}(Delete{{.Name | Title}}Request) returns (Delete{{.Name | Title}}Response) {
 		option (google.api.http) = {
 			post: "/v1/{{.Name}}/delete"
 			body: "*"
 		};
 	}
-	rpc DeleteMultiple{{.Name | Title}}(DeleteMultiple{{.Name | Title}}Request) returns (DeleteMultiple{{.Name | Title}}Response) {
-		option (google.api.http) = {
-			post: "/v1/{{.Name}}/deleteMultiple"
-			body: "*"
-		};
-	}
+	
 }
 `
