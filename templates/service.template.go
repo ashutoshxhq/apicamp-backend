@@ -151,7 +151,7 @@ func (s *Server) GetMultiple{{.Name | Title}}(ctx context.Context, req *GetMulti
 
 // CreateSingle{{.Name | Title}} stores new {{.Name}} in database and returns id
 func (s *Server) CreateSingle{{.Name | Title}}(ctx context.Context, req *CreateSingle{{.Name | Title}}Request) (*CreateSingle{{.Name | Title}}Response, error) {
-	{{range $index,$field := .Fields}}{{if (eq $field.Default "generateRandomUUID()")}}req.Data.{{$field.Name | Title}} = uuid.New().String(){{end}}{{end}}
+	{{range $index,$field := .Fields}}{{if (eq $field.Default "RANDOM_UUID")}}req.Data.{{$field.Name | Title}} = uuid.New().String(){{end}}{{end}}
 	
 	conn, err := helpers.DatabasePool.Acquire(context.Background())
 	if err != nil {
@@ -175,7 +175,7 @@ func (s *Server) CreateMultiple{{.Name | Title}}(ctx context.Context, req *Creat
 		} else{
 			values = values +", ("
 		}
-		{{range $index,$field := .Fields}}{{if (eq $field.Default "generateRandomUUID()")}}
+		{{range $index,$field := .Fields}}{{if (eq $field.Default "RANDOM_UUID")}}
 		req.Data[i].{{$field.Name | Title}} = uuid.New().String(){{end}}
 		values = values+ record.{{$field.Name | Title}}{{if (eq $index ($.NoOfFields | subOne))}}{{ else }}+","{{end}}{{end}}
 	
