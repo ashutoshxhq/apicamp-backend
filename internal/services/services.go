@@ -218,5 +218,6 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 		fmt.Printf("Unable to write file: %v", err)
 	}
 	helpers.ExecuteCommandInDirectory("go mod init "+service.Name, "./temp/"+service.Id)
+	helpers.ZipDirectory("./temp/"+service.Id, "./temp/"+service.Id+".zip")
 	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
 }
