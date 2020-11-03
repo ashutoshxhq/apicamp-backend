@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 	"net"
 	"net/http"
@@ -12,6 +13,17 @@ import (
 	"github.com/rs/cors"
 	"google.golang.org/grpc"
 )
+
+func startFileServer() {
+	port := flag.String("p", "8100", "8100")
+	directory := flag.String("d", "./public", "public")
+	flag.Parse()
+
+	http.Handle("/", http.FileServer(http.Dir(*directory)))
+
+	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
+	log.Fatal(http.ListenAndServe(":"+*port, nil))
+}
 
 func startGRPC(wg *sync.WaitGroup) {
 	lis, err := net.Listen("tcp", ":9000")
@@ -71,7 +83,7 @@ func main() {
 
 	wg.Add(1)
 	go startHTTP(&wg)
-
+	startFileServer()
 	wg.Wait()
 
 }

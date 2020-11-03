@@ -78,17 +78,6 @@
         }
       }
     },
-    "servicesError": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
     "servicesGenerateServiceCodeRequest": {
       "type": "object",
       "properties": {
@@ -103,8 +92,8 @@
         "success": {
           "type": "string"
         },
-        "error": {
-          "$ref": "#/definitions/servicesError"
+        "download": {
+          "type": "string"
         }
       }
     }

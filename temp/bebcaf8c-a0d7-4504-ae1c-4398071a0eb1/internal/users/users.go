@@ -148,7 +148,7 @@ func (s *Server) GetMultipleUsers(ctx context.Context, req *GetMultipleUsersRequ
 
 // CreateSingleUsers stores new users in database and returns id
 func (s *Server) CreateSingleUsers(ctx context.Context, req *CreateSingleUsersRequest) (*CreateSingleUsersResponse, error) {
-	
+	req.Data.Id = uuid.New().String()
 	
 	conn, err := helpers.DatabasePool.Acquire(context.Background())
 	if err != nil {
@@ -175,6 +175,7 @@ func (s *Server) CreateMultipleUsers(ctx context.Context, req *CreateMultipleUse
 		
 		values = values+ record.Name+","
 		values = values+ record.Email+","
+		req.Data[i].Id = uuid.New().String()
 		values = values+ record.Id
 	
 		values = values +")"

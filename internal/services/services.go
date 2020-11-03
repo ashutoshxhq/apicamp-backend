@@ -219,5 +219,6 @@ func (s *Server) GenerateServiceCode(ctx context.Context, req *GenerateServiceCo
 	}
 	helpers.ExecuteCommandInDirectory("go mod init "+service.Name, "./temp/"+service.Id)
 	helpers.ZipDirectory("./temp/"+service.Id, "./temp/"+service.Id+".zip")
-	return &GenerateServiceCodeResponse{Success: "generated service"}, nil
+	helpers.CopyFile("./temp/"+service.Id+".zip", "./public/"+service.Name+"-v0-0-1.zip")
+	return &GenerateServiceCodeResponse{Success: "generated service", Download: "http://localhost:8100/" + service.Name + "-v0-0-1.zip"}, nil
 }
